@@ -1,0 +1,2 @@
+[console_scripts]
+vcard = vcard.vcard:main

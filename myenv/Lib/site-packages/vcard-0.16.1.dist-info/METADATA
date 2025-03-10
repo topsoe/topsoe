@@ -1,0 +1,146 @@
+Metadata-Version: 2.1
+Name: vcard
+Version: 0.16.1
+Summary: vCard validator, class and utility functions
+Home-page: https://gitlab.com/engmark/vcard
+Download-URL: https://pypi.org/project/vcard/
+Author: Victor Engmark
+Author-email: victor@engmark.name
+Maintainer: Victor Engmark
+Maintainer-email: victor@engmark.name
+License: AGPLv3
+Keywords: vCard vCards RFC 2426 RFC2426 validator
+Platform: POSIX
+Platform: Windows
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Text Processing
+Classifier: Topic :: Utilities
+Obsoletes: vcard_module
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: python-dateutil ~=2.8.2
+
+# [vCard module](https://gitlab.com/engmark/vcard)
+
+[![Python: 3.8-3.12](https://img.shields.io/badge/Python-3.8--3.12-blue)](https://www.python.org/)
+[![coverage report](https://gitlab.com/engmark/vcard/badges/master/coverage.svg)](https://gitlab.com/engmark/vcard/-/commits/master)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![pylint: passing](https://img.shields.io/badge/pylint-passing-brightgreen)](https://www.pylint.org/)
+[![shellcheck: passing](https://img.shields.io/badge/shellcheck-passing-brightgreen)](https://www.shellcheck.net/)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
+This program can be used for strict validation and parsing of vCards. It currently supports
+[vCard 3.0 (RFC 2426)](https://tools.ietf.org/html/rfc2426).
+
+## Installation
+
+To install or upgrade in a virtualenv:
+
+```shell
+pip install --upgrade vcard
+```
+
+To use without installing:
+
+```shell
+nix-shell
+```
+
+See the nixpkgs index for instructions to install the
+[command-line tool](https://search.nixos.org/packages?channel=unstable&show=vcard&type=packages&query=vcard)
+or the
+[Python package](https://search.nixos.org/packages?channel=unstable&show=python311Packages.vcard&type=packages&query=.vcard).
+
+## Usage
+
+See `vcard --help`.
+
+## Utilities
+
+-  [`format-TEL.bash`](./format-TEL.bash) - Format phone numbers according to national standards
+-  [`split.bash`](./split.bash) - Split a multiple vCards file into individual files
+-  [`sort-lines.bash`](./sort-lines.bash) - Sort vCard property lines according to a custom key
+-  [`join-lines.sh`](./join-lines.sh) - Join previously split vCard lines
+-  [`split-lines.sh`](./split-lines.sh) - Split long vCard lines
+
+## Development
+
+### Setup
+
+```shell
+git clone git@gitlab.com:engmark/vcard.git
+```
+
+### Release
+
+1. Bump the version in [vcard/version.txt](vcard/version.txt)
+2. Commit & push everything
+3. [Create a new merge request](https://gitlab.com/engmark/vcard/-/merge_requests/new)
+4. Wait for the MR to be merged
+5. Update to latest `master`
+6. `nix-shell --pure --run './clean.bash && ./distribute.bash && ./release.bash'`
+
+Requirements:
+
+-  Nix
+
+## Contributing code
+
+You can contribute either by submitting a
+[merge requests](https://gitlab.com/engmark/vcard/-/merge_requests) or by
+[email](https://gitlab.com/engmark/vcard/-/blob/master/vcard/__init__.py#L6).
+
+Security fixes should only be submitted via email, encrypted with the PGP key
+F1C5F63013E5DE2FB574D42ACE5EB38344D85DB6.
+
+Email is also appropriate in some other cases:
+
+-  If you don't want to [create a GitLab account](https://gitlab.com/users/sign_up).
+-  If you want to be _anonymous._ Make sure to be explicit about this! Contributing anonymously
+   means the following:
+   -  You transfer copyright to me. Otherwise your contribution would make it impossible for future
+      maintainers to ever change the license - they wouldn't know who to contact to ask for
+      permission.
+   -  The commit message will make it clear that it was contributed anonymously, with an
+      "Authored-by: Anonymous <>" line.
+-  Email submissions must be in patch format, including a detailed commit message, so that it can be
+   added to the repository without any changes, and without breaking the pipeline.
+
+🚫 Other channels are _not supported._
+
+## How open is this project?
+
+[Background](https://paperless.blog/being-open-about-openness)
+
+-  GitLab features:
+   -  All features enabled for this repository are publicly available
+   -  Project settings are private for security reasons
+-  [Commit history](https://gitlab.com/engmark/vcard/-/commits/master):
+   -  All commits on all branches are publicly visible
+-  [Issues](https://gitlab.com/engmark/vcard/-/issues):
+   -  Publicly visible
+   -  You need to be logged into GitLab to submit an issue or comment
+   -  Questions from non-users interested in the project are welcome
+   -  Expect answers within a few days
+-  [Pipelines](https://gitlab.com/engmark/vcard/-/pipelines):
+   -  [The configuration](.gitlab-ci.yml) is publicly visible
+   -  [Runs](https://gitlab.com/engmark/vcard/-/pipelines) are publicly visible
+   -  Logs are publicly visible, and
+      [logs should be kept indefinitely](https://docs.gitlab.com/ee/user/gitlab_com/#job-logs).
+-  [Releases](https://pypi.org/project/vcard/):
+   -  Hosted publicly
+   -  [Old releases](https://pypi.org/project/vcard/#history) should be available indefinitely, but
+      this is under PyPI's control, not mine
+-  Work (past, current, and planned) is documented publicly within the
+   [project](https://gitlab.com/engmark/vcard)
