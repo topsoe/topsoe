@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, abort
+from flask import Flask, render_template, request, abort
 import qrcode
 import base64
 from io import BytesIO
@@ -62,8 +62,9 @@ def index():
         token = str(uuid.uuid4())
         vcard_storage[token] = vcard_data
 
-        # Generate a URL pointing to the display page for these details.
-        display_url = url_for('display', token=token, _external=True)
+        # ✅ Use the Vercel-deployed URL instead of localhost
+        display_url = f"https://ankul-qr-generator-r4jkcvq7g-aasthaas-projects.vercel.app/vcard_display.html/{token}"
+
         # Generate the QR code that encodes this URL.
         img_b64 = generate_qr_code(display_url)
 
