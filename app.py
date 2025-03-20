@@ -93,14 +93,11 @@ def index():
 
 @app.route('/display/<token>')
 def display(token):
-    # ✅ Load stored vCards before fetching data
-    vcard_storage = load_vcards()
-    
-    # Retrieve the stored details; abort with 404 if token not found.
-    vcard_data = vcard_storage.get(token)
-    if not vcard_data:
-        abort(404)
-    return render_template('vcard_display.html', **vcard_data)
+        vcard_data = vcard_storage.get(token)
+        if not vcard_data:
+            abort(404)
+        return render_template('vcard_display.html', **vcard_data)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
