@@ -1,82 +1,39 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, abort
 import qrcode
 import base64
 from io import BytesIO
-import vobject
+import uuid
 
 app = Flask(__name__)
 
-def generate_qr_code(vcard_data):
-    # Create a new vCard object
-    vcard = vobject.vCard()
+# Temporary in-memory storage for submitted details.
+vcard_storage = {}
 
-    # Construct the full name including middle name
-    full_name = " ".join(filter(None, [vcard_data.get('first_name', ''), vcard_data.get('middle_name', ''), vcard_data.get('last_name', '')]))
-
-    # Add formatted name (fn)
-    vcard.add('fn').value = full_name
-    
-    # Add name (n)
-    name_parts = {
-        'given': vcard_data.get('first_name', ''),
-        'additional': vcard_data.get('middle_name', ''),
-        'family': vcard_data.get('last_name', '')  # Ensure last_name is handled properly
-    }
-    vcard.add('n').value = vobject.vcard.Name(**name_parts)
-
-    # Add phone numbers
-    phone_numbers = [vcard_data.get('phone_work', ''),
-                 vcard_data.get('phone_personal', ''),
-                 vcard_data.get('phone_personal_2', '')]
-
-    for phone in phone_numbers:
-        if phone:  # Only add non-empty phone numbers
-            vcard.add('tel').value = phone
-
-    
-    # Add email addresses
-    emails = [vcard_data.get('email', ''), vcard_data.get('email2', '')]  # Collect all email addresses
-    for email in emails:
-        if email:  # Check if email is not empty
-            vcard.add('email').value = email
-
-    # Add address and website
-    vcard.add('adr').value = vobject.vcard.Address(street=vcard_data.get('address', ''),
-                                                   city=vcard_data.get('city', ''),
-                                                   region=vcard_data.get('state', ''),
-                                                   code=vcard_data.get('zip_code', ''),
-                                                   country=vcard_data.get('country', ''))
-    vcard.add('url').value = vcard_data.get('website', '')
-
-    # Serialize the vCard to a string
-    vcard_str = vcard.serialize()
-
-    # Generate QR code
+def generate_qr_code(url):
+    """Generate a base64 encoded QR code image for a given URL."""
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
     )
-    qr.add_data(vcard_str)
+    qr.add_data(url)
     qr.make(fit=True)
-
-    # Convert the QR code image to base64
     img = qr.make_image(fill_color="black", back_color="white")
     img_bytes_io = BytesIO()
     img.save(img_bytes_io, format='PNG')
     img_bytes_io.seek(0)
-    img_b64 = base64.b64encode(img_bytes_io.getvalue()).decode('utf-8')
-
-    return img_b64
-
+    return base64.b64encode(img_bytes_io.getvalue()).decode('utf-8')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        # Retrieve form data including new fields
         first_name = request.form['first_name']
         middle_name = request.form['middle_name']
         last_name = request.form['last_name']
+        designation = request.form['designation']
+        company_name = request.form['company_name']
         phone_work = request.form['phone_work']
         phone_personal = request.form['phone_personal']
         phone_personal_2 = request.form['phone_personal_2']
@@ -85,28 +42,43 @@ def index():
         address = request.form['address']
         website = request.form['website']
 
-        # Create the vCard data
+        # Package the data into a dictionary.
         vcard_data = {
             'first_name': first_name,
             'middle_name': middle_name,
             'last_name': last_name,
+            'designation': designation,
+            'company_name': company_name,
             'phone_work': phone_work,
             'phone_personal': phone_personal,
-            'phone_personal2': phone_personal_2,
+            'phone_personal_2': phone_personal_2,
             'email': email,
             'email2': email2,
             'address': address,
             'website': website,
         }
 
-        # Generate the QR code
-        img_b64 = generate_qr_code(vcard_data)
+        # Generate a unique token and store the details.
+        token = str(uuid.uuid4())
+        vcard_storage[token] = vcard_data
 
-        # Render the result template with the QR code
-        return render_template('result.html', img_b64=img_b64)
+        # Generate a URL pointing to the display page for these details.
+        display_url = url_for('display', token=token, _external=True)
+        # Generate the QR code that encodes this URL.
+        img_b64 = generate_qr_code(display_url)
 
-    # If it's a GET request, render the index template
+        # Render the result page with the QR code and a clickable link.
+        return render_template('result.html', img_b64=img_b64, display_url=display_url)
+
     return render_template('index.html')
 
+@app.route('/display/<token>')
+def display(token):
+    # Retrieve the stored details; abort with 404 if token not found.
+    vcard_data = vcard_storage.get(token)
+    if not vcard_data:
+        abort(404)
+    return render_template('vcard_display.html', **vcard_data)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
