@@ -8,6 +8,7 @@ import os
 
 app = Flask(__name__)
 
+
 # Store data persistently in a JSON file
 DATA_FILE = "vcard_data.json"
 
@@ -101,6 +102,10 @@ def display(token):
     if not vcard_data:
         abort(404)
     return render_template('vcard_display.html', **vcard_data)
+@app.route('/display/<id>')
+def display_vcard(id):
+    # Fetch data using `id`
+    return render_template('vcard-display.html', id=id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
