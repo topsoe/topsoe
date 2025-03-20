@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort, redirect
+from flask import Flask, render_template, request, abort, jsonify
 import qrcode
 import base64
 from io import BytesIO
@@ -8,23 +8,23 @@ import os
 
 app = Flask(__name__)
 
-# ✅ Store vCards persistently in a JSON file
-VCARD_FILE = "vcard_data.json"
+# Store data persistently in a JSON file
+DATA_FILE = "vcard_data.json"
 
-# ✅ Function to load stored vCards
-def load_vcards():
-    if os.path.exists(VCARD_FILE):
-        with open(VCARD_FILE, "r") as f:
-            return json.load(f)
-    return {}
+# Function to load stored data
+def load_data():
+    if not os.path.exists(DATA_FILE):
+        return {}
+    with open(DATA_FILE, "r") as file:
+        return json.load(file)
 
-# ✅ Function to save vCards to a file
-def save_vcards(vcard_storage):
-    with open(VCARD_FILE, "w") as f:
-        json.dump(vcard_storage, f)
+# Function to save data persistently
+def save_data(data):
+    with open(DATA_FILE, "w") as file:
+        json.dump(data, file, indent=4)
 
-# Load stored vCards
-vcard_storage = load_vcards()
+# Load existing data
+vcard_storage = load_data()
 
 def generate_qr_code(url):
     """Generate a base64 encoded QR code image for a given URL."""
@@ -45,7 +45,7 @@ def generate_qr_code(url):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # Retrieve form data including new fields
+        # Retrieve form data
         first_name = request.form['first_name']
         middle_name = request.form['middle_name']
         last_name = request.form['last_name']
@@ -75,13 +75,13 @@ def index():
             'website': website,
         }
 
-        # ✅ Generate a unique token and store the details.
+        # Generate a unique token and store the details.
         token = str(uuid.uuid4())
         vcard_storage[token] = vcard_data
-        save_vcards(vcard_storage)  # Save to JSON file
+        save_data(vcard_storage)  # Save data persistently
 
-        # ✅ Correct URL pointing to the Flask route `/display/<token>`
-        display_url = f"https://ankul-qr-generator-7dyvouklq-aasthaas-projects.vercel.app/display/{token}"
+        # ✅ FIXED: Use the correct Vercel URL (replace with your real project URL)
+        display_url = f"https://ankul-qr-generator.vercel.app/display/{token}"
 
         # Generate the QR code that encodes this URL.
         img_b64 = generate_qr_code(display_url)
@@ -93,11 +93,14 @@ def index():
 
 @app.route('/display/<token>')
 def display(token):
-        vcard_data = vcard_storage.get(token)
-        if not vcard_data:
-            abort(404)
-        return render_template('vcard_display.html', **vcard_data)
+    # Load latest data
+    vcard_storage = load_data()
 
+    # Retrieve the stored details; abort with 404 if token not found.
+    vcard_data = vcard_storage.get(token)
+    if not vcard_data:
+        abort(404)
+    return render_template('vcard_display.html', **vcard_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
