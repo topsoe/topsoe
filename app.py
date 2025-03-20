@@ -1,13 +1,30 @@
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, redirect
 import qrcode
 import base64
 from io import BytesIO
 import uuid
+import json
+import os
 
 app = Flask(__name__)
 
-# Temporary in-memory storage for submitted details.
-vcard_storage = {}
+# ✅ Store vCards persistently in a JSON file
+VCARD_FILE = "vcard_data.json"
+
+# ✅ Function to load stored vCards
+def load_vcards():
+    if os.path.exists(VCARD_FILE):
+        with open(VCARD_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+# ✅ Function to save vCards to a file
+def save_vcards(vcard_storage):
+    with open(VCARD_FILE, "w") as f:
+        json.dump(vcard_storage, f)
+
+# Load stored vCards
+vcard_storage = load_vcards()
 
 def generate_qr_code(url):
     """Generate a base64 encoded QR code image for a given URL."""
@@ -58,12 +75,13 @@ def index():
             'website': website,
         }
 
-        # Generate a unique token and store the details.
+        # ✅ Generate a unique token and store the details.
         token = str(uuid.uuid4())
         vcard_storage[token] = vcard_data
+        save_vcards(vcard_storage)  # Save to JSON file
 
-        # ✅ Use the Vercel-deployed URL instead of localhost
-        display_url = f"https://ankul-qr-generator-7dyvouklq-aasthaas-projects.vercel.app/vcard-display.html/{token}"
+        # ✅ Correct URL pointing to the Flask route `/display/<token>`
+        display_url = f"https://ankul-qr-generator-7dyvouklq-aasthaas-projects.vercel.app/display/{token}"
 
         # Generate the QR code that encodes this URL.
         img_b64 = generate_qr_code(display_url)
@@ -75,6 +93,9 @@ def index():
 
 @app.route('/display/<token>')
 def display(token):
+    # ✅ Load stored vCards before fetching data
+    vcard_storage = load_vcards()
+    
     # Retrieve the stored details; abort with 404 if token not found.
     vcard_data = vcard_storage.get(token)
     if not vcard_data:
