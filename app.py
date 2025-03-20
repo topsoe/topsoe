@@ -63,7 +63,7 @@ def index():
         vcard_storage[token] = vcard_data
 
         # ✅ Use the Vercel-deployed URL instead of localhost
-        display_url = f"https://ankul-qr-generator-r4jkcvq7g-aasthaas-projects.vercel.app/vcard_display.html/{token}"
+        display_url = f"https://ankul-qr-generator-7dyvouklq-aasthaas-projects.vercel.app/vcard_display.html/{token}"
 
         # Generate the QR code that encodes this URL.
         img_b64 = generate_qr_code(display_url)
