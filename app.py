@@ -83,7 +83,7 @@ def index():
 
         {"<div class='info'><span class='label'>Website</span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
         
-        <button class="button" onclick="downloadVCard()">Download vCard</button>
+        
         <div class="footer">Scanned via Ankul Reprographics QR Generator</div>
     </div>
 
