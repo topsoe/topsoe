@@ -120,8 +120,8 @@ END:VCARD`;
             f.write(html_content)
 
         # ✅ **Corrected GitHub URL**
-        github_username = "aasthaarora21"  # Change this to your GitHub username
-        repo_name = "QRCode"  # Change this to your GitHub repo name
+        github_username = "topsoe"  # Change this to your GitHub username
+        repo_name = "topsoe"  # Change this to your GitHub repo name
         github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
 
         # Generate the QR code with this GitHub-hosted URL
