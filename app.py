@@ -70,17 +70,17 @@ def index():
         
         {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
         
-        {"<div class='info'><span class='label'></span> " + phone_work + "</div>" if phone_work else ""}
-        {"<div class='info'><span class='label'></span> " + phone_personal + "</div>" if phone_personal else ""}
+        {"<div class='info'><span class='label'>Reception</span> " + phone_work + "</div>" if phone_work else ""}
+        {"<div class='info'><span class='label'>Mobile</span> " + phone_personal + "</div>" if phone_personal else ""}
         {"<div class='info'><span class='label'></span> " + phone_personal_2 + "</div>" if phone_personal_2 else ""}
         
-        {"<div class='info'><span class='label'></span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
+        {"<div class='info'><span class='label'>Email</span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
         {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
-        {"<div class='info'><span class='label'></span> " + address + "</div>" if address else ""}
-        {"<div class='info'><span class='label'></span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
+        {"<div class='info'><span class='label'>Address</span> " + address + "</div>" if address else ""}
+        {"<div class='info'><span class='label'>Website</span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
         
         <button class="button" onclick="downloadVCard()">Download vCard</button>
-        <div class="footer">Scanned via Ankul Reprographics QR Code</div>
+        <div class="footer">Scanned via Ankul Reprographics QR Generator</div>
     </div>
 
     <script>
