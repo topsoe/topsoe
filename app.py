@@ -78,7 +78,7 @@ def index():
 
         # ✅ **Corrected GitHub URL**
         github_username = "aasthaarora21"  # Change this to your GitHub username
-        repo_name = "master"   # Change this to your GitHub repo name
+        repo_name = "Q"   # Change this to your GitHub repo name
         github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
 
         # Generate the QR code with this GitHub-hosted URL
