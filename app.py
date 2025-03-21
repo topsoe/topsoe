@@ -49,77 +49,76 @@ def index():
         filename = f"display-{token}.html"
 
         # Generate the HTML content
-        html_content = f"""
+    html_content = f"""
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{first_name} {last_name} - Business Card</title>
-    <style>
-        body {{
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }}
-
-        .card {{
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }}
-
-        .info p {{
-            margin: 5px 0;
-        }}
-
-        .label {{
-            font-weight: bold;
-        }}
-    </style>
+    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
 </head>
 <body>
     <div class="card">
-        <h1>{first_name} {middle_name} {last_name}</h1>
-        {"<p><span class='label'>Designation:</span> " + designation + "</p>" if designation else ""}
-        {"<p><span class='label'>Company:</span> " + company_name + "</p>" if company_name else ""}
-        {"<p><span class='label'>Work Phone:</span> " + phone_work + "</p>" if phone_work else ""}
-        {"<p><span class='label'>Personal Phone:</span> " + phone_personal + "</p>" if phone_personal else ""}
-        {"<p><span class='label'>Alternate Phone:</span> " + phone_personal_2 + "</p>" if phone_personal_2 else ""}
-        {"<p><span class='label'>Email:</span> <a href='mailto:" + email + "'>" + email + "</a></p>" if email else ""}
-        {"<p><span class='label'>Alternate Email:</span> <a href='mailto:" + email2 + "'>" + email2 + "</a></p>" if email2 else ""}
-        {"<p><span class='label'>Address:</span> " + address + "</p>" if address else ""}
-        {"<p><span class='label'>Website:</span> <a href='" + website + "' target='_blank'>" + website + "</a></p>" if website else ""}
+        <div class="profile-icon">👤</div>
+        <div class="name">{first_name} {middle_name} {last_name}</div>
+        
+        {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
+        
+        {"<div class='info'><span class='label'></span> " + phone_work + "</div>" if phone_work else ""}
+        {"<div class='info'><span class='label'></span> " + phone_personal + "</div>" if phone_personal else ""}
+        {"<div class='info'><span class='label'></span> " + phone_personal_2 + "</div>" if phone_personal_2 else ""}
+        
+        {"<div class='info'><span class='label'></span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
+        {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
+        {"<div class='info'><span class='label'></span> " + address + "</div>" if address else ""}
+        {"<div class='info'><span class='label'></span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
+        
+        <button class="button" onclick="downloadVCard()">Download vCard</button>
+        <div class="footer">Scanned via Ankul Reprographics QR Code</div>
     </div>
+
+    <script>
+        function downloadVCard() {{
+            const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:{first_name} {last_name}
+ORG:{company_name}
+TITLE:{designation}
+TEL;TYPE=WORK:{phone_work}
+EMAIL:{email}
+ADR:{address}
+URL:{website}
+END:VCARD`;
+
+            const blob = new Blob([vCardData], {{ type: 'text/vcard' }});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "contact.vcf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }}
+    </script>
+
 </body>
 </html>
 """
 
 
         # Save the HTML file
-        with open(f"static/{filename}", "w", encoding="utf-8") as f:
+    with open(f"static/{filename}", "w", encoding="utf-8") as f:
             f.write(html_content)
 
         # ✅ **Corrected GitHub URL**
-        github_username = "aasthaarora21"  # Change this to your GitHub username
-        repo_name = "QRCode"   # Change this to your GitHub repo name
-        github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
+    github_username = "aasthaarora21"  # Change this to your GitHub username
+    repo_name = "QRCode"   # Change this to your GitHub repo name
+    github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
 
         # Generate the QR code with this GitHub-hosted URL
-        img_b64 = generate_qr_code(github_url)
+    img_b64 = generate_qr_code(github_url)
 
-        return render_template('result.html', img_b64=img_b64, display_url=github_url)
-
-    return render_template('index.html')
+    return render_template('result.html', img_b64=img_b64, display_url=github_url)
 
 if __name__ == '__main__':
     app.run(debug=True)
