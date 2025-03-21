@@ -76,7 +76,11 @@ def index():
         
         {"<div class='info'><span class='label'>Email</span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
         {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
-        {"<div class='info'><span class='label'>Address</span> " + address + "</div>" if address else ""}
+        {f"<div class='info'><table class='info'>"
+    f"<tr><td class='label'><strong>Address</strong></td><td>{address.replace(',', '<br>')}</td></tr>"
+    f"</table></div>" if address else ""}
+
+
         {"<div class='info'><span class='label'>Website</span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
         
         <button class="button" onclick="downloadVCard()">Download vCard</button>

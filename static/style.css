@@ -116,3 +116,20 @@ body {
     color: var(--label-color);
     margin-top: 20px;
 }
+
+.info table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+.info td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+.label {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
