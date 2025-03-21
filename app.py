@@ -81,10 +81,12 @@ def index():
     f"</table></div>" if address else ""}
 
 
-        {"<div class='info'><span class='label'>Website</span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
+        {f"""<div class='info'><span class='label'>Website</span> 
+<a href='https://{website}' target='_blank'>{website}</a></div>""" if website else ""
+}
         
         
-        <div class="footer">Scanned via Ankul Reprographics QR Generator</div>
+        <div class="footer">Powered by Ankul Reprographics And Prints</div>
     </div>
 
     <script>
