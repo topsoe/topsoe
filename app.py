@@ -50,27 +50,60 @@ def index():
 
         # Generate the HTML content
         html_content = f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>{first_name} {last_name} - Business Card</title>
-        </head>
-        <body>
-            <h1>{first_name} {middle_name} {last_name}</h1>
-            <p><strong>Designation:</strong> {designation}</p>
-            <p><strong>Company:</strong> {company_name}</p>
-            <p><strong>Work Phone:</strong> {phone_work}</p>
-            <p><strong>Personal Phone:</strong> {phone_personal}</p>
-            <p><strong>Alternate Phone:</strong> {phone_personal_2}</p>
-            <p><strong>Email:</strong> <a href="mailto:{email}">{email}</a></p>
-            <p><strong>Alternate Email:</strong> <a href="mailto:{email2}">{email2}</a></p>
-            <p><strong>Address:</strong> {address}</p>
-            <p><strong>Website:</strong> <a href="{website}" target="_blank">{website}</a></p>
-        </body>
-        </html>
-        """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{first_name} {last_name} - Business Card</title>
+    <style>
+        body {{
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }}
+
+        .card {{
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }}
+
+        .info p {{
+            margin: 5px 0;
+        }}
+
+        .label {{
+            font-weight: bold;
+        }}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>{first_name} {middle_name} {last_name}</h1>
+        {"<p><span class='label'>Designation:</span> " + designation + "</p>" if designation else ""}
+        {"<p><span class='label'>Company:</span> " + company_name + "</p>" if company_name else ""}
+        {"<p><span class='label'>Work Phone:</span> " + phone_work + "</p>" if phone_work else ""}
+        {"<p><span class='label'>Personal Phone:</span> " + phone_personal + "</p>" if phone_personal else ""}
+        {"<p><span class='label'>Alternate Phone:</span> " + phone_personal_2 + "</p>" if phone_personal_2 else ""}
+        {"<p><span class='label'>Email:</span> <a href='mailto:" + email + "'>" + email + "</a></p>" if email else ""}
+        {"<p><span class='label'>Alternate Email:</span> <a href='mailto:" + email2 + "'>" + email2 + "</a></p>" if email2 else ""}
+        {"<p><span class='label'>Address:</span> " + address + "</p>" if address else ""}
+        {"<p><span class='label'>Website:</span> <a href='" + website + "' target='_blank'>" + website + "</a></p>" if website else ""}
+    </div>
+</body>
+</html>
+"""
+
 
         # Save the HTML file
         with open(f"static/{filename}", "w", encoding="utf-8") as f:
