@@ -61,7 +61,7 @@ def index():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{first_name} {last_name} - Business Card</title>
-    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
+   
 </head>
 <body>
     <div class="card">
@@ -122,7 +122,7 @@ END:VCARD`;
         # ✅ **Corrected GitHub URL**
         github_username = "topsoe"  # Change this to your GitHub username
         repo_name = "topsoe"  # Change this to your GitHub repo name
-        github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
+        github_url = f" http://topsoe.employee/{repo_name}/static/{filename}"
 
         # Generate the QR code with this GitHub-hosted URL
         img_b64 = generate_qr_code(github_url)
