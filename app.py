@@ -1,31 +1,15 @@
-from flask import Flask, render_template, request, abort, jsonify
+from flask import Flask, render_template, request
 import qrcode
 import base64
 from io import BytesIO
 import uuid
-import json
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='static')
 
-
-# Store data persistently in a JSON file
-DATA_FILE = "vcard_data.json"
-
-# Function to load stored data
-def load_data():
-    if not os.path.exists(DATA_FILE):
-        return {}
-    with open(DATA_FILE, "r") as file:
-        return json.load(file)
-
-# Function to save data persistently
-def save_data(data):
-    with open(DATA_FILE, "w") as file:
-        json.dump(data, file, indent=4)
-
-# Load existing data
-vcard_storage = load_data()
+# Ensure the 'static/' folder exists
+if not os.path.exists("static"):
+    os.makedirs("static")
 
 def generate_qr_code(url):
     """Generate a base64 encoded QR code image for a given URL."""
@@ -60,52 +44,49 @@ def index():
         address = request.form['address']
         website = request.form['website']
 
-        # Package the data into a dictionary.
-        vcard_data = {
-            'first_name': first_name,
-            'middle_name': middle_name,
-            'last_name': last_name,
-            'designation': designation,
-            'company_name': company_name,
-            'phone_work': phone_work,
-            'phone_personal': phone_personal,
-            'phone_personal_2': phone_personal_2,
-            'email': email,
-            'email2': email2,
-            'address': address,
-            'website': website,
-        }
+        # Generate a unique filename
+        token = str(uuid.uuid4())[:8]  # Shortened token for readability
+        filename = f"display-{token}.html"
 
-        # Generate a unique token and store the details.
-        token = str(uuid.uuid4())
-        vcard_storage[token] = vcard_data
-        save_data(vcard_storage)  # Save data persistently
+        # Generate the HTML content
+        html_content = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{first_name} {last_name} - Business Card</title>
+        </head>
+        <body>
+            <h1>{first_name} {middle_name} {last_name}</h1>
+            <p><strong>Designation:</strong> {designation}</p>
+            <p><strong>Company:</strong> {company_name}</p>
+            <p><strong>Work Phone:</strong> {phone_work}</p>
+            <p><strong>Personal Phone:</strong> {phone_personal}</p>
+            <p><strong>Alternate Phone:</strong> {phone_personal_2}</p>
+            <p><strong>Email:</strong> <a href="mailto:{email}">{email}</a></p>
+            <p><strong>Alternate Email:</strong> <a href="mailto:{email2}">{email2}</a></p>
+            <p><strong>Address:</strong> {address}</p>
+            <p><strong>Website:</strong> <a href="{website}" target="_blank">{website}</a></p>
+        </body>
+        </html>
+        """
 
-        # ✅ FIXED: Use the correct Vercel URL (replace with your real project URL)
-        display_url = f"https://ankul-qr-generator.vercel.app/display/{token}"
+        # Save the HTML file
+        with open(f"static/{filename}", "w", encoding="utf-8") as f:
+            f.write(html_content)
 
-        # Generate the QR code that encodes this URL.
-        img_b64 = generate_qr_code(display_url)
+        # ✅ **Corrected GitHub URL**
+        github_username = "aasthaarora21"  # Change this to your GitHub username
+        repo_name = "ankul_qr_generator"   # Change this to your GitHub repo name
+        github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
 
-        # Render the result page with the QR code and a clickable link.
-        return render_template('result.html', img_b64=img_b64, display_url=display_url)
+        # Generate the QR code with this GitHub-hosted URL
+        img_b64 = generate_qr_code(github_url)
+
+        return render_template('result.html', img_b64=img_b64, display_url=github_url)
 
     return render_template('index.html')
 
-@app.route('/display/<token>')
-def display(token):
-    # Load latest data
-    vcard_storage = load_data()
-
-    # Retrieve the stored details; abort with 404 if token not found.
-    vcard_data = vcard_storage.get(token)
-    if not vcard_data:
-        abort(404)
-    return render_template('vcard_display.html', **vcard_data)
-@app.route('/display/<id>')
-def display_vcard(id):
-    # Fetch data using `id`
-    return render_template('vcard-display.html', id=id)
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
