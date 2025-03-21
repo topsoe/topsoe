@@ -30,57 +30,61 @@ def generate_qr_code(url):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # Retrieve form data
-        first_name = request.form['first_name']
-        middle_name = request.form['middle_name']
-        last_name = request.form['last_name']
-        designation = request.form['designation']
-        company_name = request.form['company_name']
-        phone_work = request.form['phone_work']
-        phone_personal = request.form['phone_personal']
-        phone_personal_2 = request.form['phone_personal_2']
-        email = request.form['email']
-        email2 = request.form['email2']
-        address = request.form['address']
-        website = request.form['website']
+        # Retrieve form data, using `.get()` to avoid missing key errors
+        first_name = request.form.get('first_name', '').strip()
+        middle_name = request.form.get('middle_name', '').strip()
+        last_name = request.form.get('last_name', '').strip()
+        designation = request.form.get('designation', '').strip()
+        company_name = request.form.get('company_name', '').strip()
+        phone_work = request.form.get('phone_work', '').strip()
+        phone_personal = request.form.get('phone_personal', '').strip()
+        phone_personal_2 = request.form.get('phone_personal_2', '').strip()
+        email = request.form.get('email', '').strip()
+        email2 = request.form.get('email2', '').strip()
+        address = request.form.get('address', '').strip()
+        website = request.form.get('website', '').strip()
+
+        # Ensure at least one required field is filled
+        if not first_name and not last_name:
+            return "Error: First Name or Last Name must be provided!", 400
 
         # Generate a unique filename
         token = str(uuid.uuid4())[:8]  # Shortened token for readability
         filename = f"display-{token}.html"
 
-        # Generate the HTML content
-    html_content = f"""
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{first_name} {last_name} - Business Card</title>
-    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
-</head>
-<body>
-    <div class="card">
-        <div class="profile-icon">👤</div>
-        <div class="name">{first_name} {middle_name} {last_name}</div>
-        
-        {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
-        
-        {"<div class='info'><span class='label'></span> " + phone_work + "</div>" if phone_work else ""}
-        {"<div class='info'><span class='label'></span> " + phone_personal + "</div>" if phone_personal else ""}
-        {"<div class='info'><span class='label'></span> " + phone_personal_2 + "</div>" if phone_personal_2 else ""}
-        
-        {"<div class='info'><span class='label'></span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
-        {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
-        {"<div class='info'><span class='label'></span> " + address + "</div>" if address else ""}
-        {"<div class='info'><span class='label'></span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
-        
-        <button class="button" onclick="downloadVCard()">Download vCard</button>
-        <div class="footer">Scanned via Ankul Reprographics QR Code</div>
-    </div>
+        # Generate the HTML content with CSS
+        html_content = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{first_name} {last_name} - Business Card</title>
+            <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
+        </head>
+        <body>
+            <div class="card">
+                <div class="profile-icon">👤</div>
+                <div class="name">{first_name} {middle_name} {last_name}</div>
+                
+                {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
+                
+                {"<div class='info'><span class='label'></span> " + phone_work + "</div>" if phone_work else ""}
+                {"<div class='info'><span class='label'></span> " + phone_personal + "</div>" if phone_personal else ""}
+                {"<div class='info'><span class='label'></span> " + phone_personal_2 + "</div>" if phone_personal_2 else ""}
+                
+                {"<div class='info'><span class='label'></span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
+                {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
+                {"<div class='info'><span class='label'></span> " + address + "</div>" if address else ""}
+                {"<div class='info'><span class='label'></span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
+                
+                <button class="button" onclick="downloadVCard()">Download vCard</button>
+                <div class="footer">Scanned via Ankul Reprographics QR Code</div>
+            </div>
 
-    <script>
-        function downloadVCard() {{
-            const vCardData = `BEGIN:VCARD
+            <script>
+                function downloadVCard() {{
+                    const vCardData = `BEGIN:VCARD
 VERSION:3.0
 FN:{first_name} {last_name}
 ORG:{company_name}
@@ -91,34 +95,36 @@ ADR:{address}
 URL:{website}
 END:VCARD`;
 
-            const blob = new Blob([vCardData], {{ type: 'text/vcard' }});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "contact.vcf";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }}
-    </script>
+                    const blob = new Blob([vCardData], {{ type: 'text/vcard' }});
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = "contact.vcf";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }}
+            </script>
 
-</body>
-</html>
-"""
-
+        </body>
+        </html>
+        """
 
         # Save the HTML file
-    with open(f"static/{filename}", "w", encoding="utf-8") as f:
+        with open(f"static/{filename}", "w", encoding="utf-8") as f:
             f.write(html_content)
 
         # ✅ **Corrected GitHub URL**
-    github_username = "aasthaarora21"  # Change this to your GitHub username
-    repo_name = "QRCode"   # Change this to your GitHub repo name
-    github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
+        github_username = "aasthaarora21"  # Change this to your GitHub username
+        repo_name = "QRCode"  # Change this to your GitHub repo name
+        github_url = f"https://{github_username}.github.io/{repo_name}/static/{filename}"
 
         # Generate the QR code with this GitHub-hosted URL
-    img_b64 = generate_qr_code(github_url)
+        img_b64 = generate_qr_code(github_url)
 
-    return render_template('result.html', img_b64=img_b64, display_url=github_url)
+        return render_template('result.html', img_b64=img_b64, display_url=github_url)
+
+    return render_template('index.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

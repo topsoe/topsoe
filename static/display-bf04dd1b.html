@@ -1,0 +1,55 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Manish Das - Business Card</title>
+            <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
+        </head>
+        <body>
+            <div class="card">
+                <div class="profile-icon">👤</div>
+                <div class="name">Manish  Das</div>
+                
+                <div class='designation'>Key Account Manager Sales - India at Topsoe</div>
+                
+                <div class='info'><span class='label'></span> + 91 924 0018000</div>
+                <div class='info'><span class='label'></span> +919898260245</div>
+                
+                
+                <div class='info'><span class='label'></span> <a href='mailto:mdas@topsoe.com'>mdas@topsoe.com</a></div>
+                
+                <div class='info'><span class='label'></span> Topsoe India Private Ltd,    DLF Tech Park 5th Floor, Plot no 1 Sector 143A, Noida Uttar Pradesh - 201307, India</div>
+                <div class='info'><span class='label'></span> <a href='Topsoe.com' target='_blank'>Topsoe.com</a></div>
+                
+                <button class="button" onclick="downloadVCard()">Download vCard</button>
+                <div class="footer">Scanned via Ankul Reprographics QR Code</div>
+            </div>
+
+            <script>
+                function downloadVCard() {
+                    const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Manish Das
+ORG:Topsoe
+TITLE:Key Account Manager Sales - India
+TEL;TYPE=WORK:+ 91 924 0018000
+EMAIL:mdas@topsoe.com
+ADR:Topsoe India Private Ltd,    DLF Tech Park 5th Floor, Plot no 1 Sector 143A, Noida Uttar Pradesh - 201307, India
+URL:Topsoe.com
+END:VCARD`;
+
+                    const blob = new Blob([vCardData], { type: 'text/vcard' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = "contact.vcf";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            </script>
+
+        </body>
+        </html>
+        
