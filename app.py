@@ -61,7 +61,7 @@ def index():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{first_name} {last_name} - Business Card</title>
-    
+    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
 </head>
 <body>
     <div class="card">
