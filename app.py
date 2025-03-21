@@ -53,38 +53,39 @@ def index():
         filename = f"display-{token}.html"
 
         # Generate the HTML content with CSS
+        # Generate the HTML content with the new design
         html_content = f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>{first_name} {last_name} - Business Card</title>
-            <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
-        </head>
-        <body>
-            <div class="card">
-                <div class="profile-icon">👤</div>
-                <div class="name">{first_name} {middle_name} {last_name}</div>
-                
-                {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
-                
-                {"<div class='info'><span class='label'></span> " + phone_work + "</div>" if phone_work else ""}
-                {"<div class='info'><span class='label'></span> " + phone_personal + "</div>" if phone_personal else ""}
-                {"<div class='info'><span class='label'></span> " + phone_personal_2 + "</div>" if phone_personal_2 else ""}
-                
-                {"<div class='info'><span class='label'></span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
-                {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
-                {"<div class='info'><span class='label'></span> " + address + "</div>" if address else ""}
-                {"<div class='info'><span class='label'></span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
-                
-                <button class="button" onclick="downloadVCard()">Download vCard</button>
-                <div class="footer">Scanned via Ankul Reprographics QR Code</div>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{first_name} {last_name} - Business Card</title>
+    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="profile-icon">👤</div>
+        <div class="name">{first_name} {middle_name} {last_name}</div>
+        
+        {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
+        
+        {"<div class='info'><span class='label'></span> " + phone_work + "</div>" if phone_work else ""}
+        {"<div class='info'><span class='label'></span> " + phone_personal + "</div>" if phone_personal else ""}
+        {"<div class='info'><span class='label'></span> " + phone_personal_2 + "</div>" if phone_personal_2 else ""}
+        
+        {"<div class='info'><span class='label'></span> <a href='mailto:" + email + "'>" + email + "</a></div>" if email else ""}
+        {"<div class='info'><span class='label'></span> <a href='mailto:" + email2 + "'>" + email2 + "</a></div>" if email2 else ""}
+        {"<div class='info'><span class='label'></span> " + address + "</div>" if address else ""}
+        {"<div class='info'><span class='label'></span> <a href='" + website + "' target='_blank'>" + website + "</a></div>" if website else ""}
+        
+        <button class="button" onclick="downloadVCard()">Download vCard</button>
+        <div class="footer">Scanned via Ankul Reprographics QR Code</div>
+    </div>
 
-            <script>
-                function downloadVCard() {{
-                    const vCardData = `BEGIN:VCARD
+    <script>
+        function downloadVCard() {{
+            const vCardData = `BEGIN:VCARD
 VERSION:3.0
 FN:{first_name} {last_name}
 ORG:{company_name}
@@ -95,19 +96,20 @@ ADR:{address}
 URL:{website}
 END:VCARD`;
 
-                    const blob = new Blob([vCardData], {{ type: 'text/vcard' }});
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = "contact.vcf";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                }}
-            </script>
+            const blob = new Blob([vCardData], {{ type: 'text/vcard' }});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "contact.vcf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }}
+    </script>
 
-        </body>
-        </html>
-        """
+    </body>
+    </html>
+    """
+
 
         # Save the HTML file
         with open(f"static/{filename}", "w", encoding="utf-8") as f:
