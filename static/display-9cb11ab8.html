@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raman Sondhi - Business Card</title>
+    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="profile-icon">👤</div>
+        <div class="name">Raman  Sondhi</div>
+        
+        <div class='designation'>Head Of Department Sales - India at Topsoe</div>
+        
+        <div class='info'><span class='label'>Reception</span> +919810202871</div>
+        <div class='info'><span class='label'>Mobile</span> +918588898505</div>
+        
+        
+        <div class='info'><span class='label'>Email</span> <a href='mailto:rs@topsoe.com'>rs@topsoe.com</a></div>
+        
+        <div class='info'><table class='info'><tr><td class='label'><strong>Address</strong></td><td>Topsoe India Pvt. Ltd<br> DLF Tech Park 5th Floor<br> Plot no 1<br> Sector 143A<br> Noida<br> Uttar Pradesh - 201307<br> India</td></tr></table></div>
+
+
+        <div class='info'><span class='label'>Website</span> 
+<a href='https://Topsoe.com' target='_blank'>Topsoe.com</a></div>
+        
+        
+        <div class="footer">Powered by Ankul Reprographics And Prints</div>
+    </div>
+
+    <script>
+        function downloadVCard() {
+            const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Raman Sondhi
+ORG:Topsoe
+TITLE:Head Of Department Sales - India
+TEL;TYPE=WORK:+919810202871
+EMAIL:rs@topsoe.com
+ADR:Topsoe India Pvt. Ltd, DLF Tech Park 5th Floor, Plot no 1, Sector 143A, Noida, Uttar Pradesh - 201307, India
+URL:Topsoe.com
+END:VCARD`;
+
+            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "contact.vcf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+
+    </body>
+    </html>
+    
