@@ -13,7 +13,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #fefefe, #fefefe);
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,20 +116,3 @@ body {
     color: var(--label-color);
     margin-top: 20px;
 }
-
-.info table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 5px;
-}
-
-.info td {
-    padding: 5px;
-    vertical-align: top;
-}
-
-.label {
-    font-weight: bold;
-    padding-right: 10px;
-}
-
