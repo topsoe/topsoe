@@ -61,14 +61,14 @@ def index():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{first_name} {last_name} - Business Card</title>
-    <link rel="stylesheet" href="https://aasthaarora21.github.io/QRCode/static/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="card">
         <div class="profile-icon">👤</div>
         <div class="name">{first_name} {middle_name} {last_name}</div>
         
-        {"<div class='designation'>" + designation + (" at " + company_name if company_name else "") + "</div>" if designation else ""}
+        {"<div class='designation'>" + designation  + "</div>" if designation else ""}
         
         {"<div class='info'><span class='label'>Reception</span> " + phone_work + "</div>" if phone_work else ""}
         {"<div class='info'><span class='label'>Mobile</span> " + phone_personal + "</div>" if phone_personal else ""}
