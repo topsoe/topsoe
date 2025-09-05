@@ -116,3 +116,11 @@ body {
     color: var(--label-color);
     margin-top: 20px;
 }
+
+/* 🌟 Fix Address Alignment */
+.address {
+    display: inline-block;
+    vertical-align: top;
+    max-width: calc(100% - 120px); /* keeps it aligned with label width */
+}
+
