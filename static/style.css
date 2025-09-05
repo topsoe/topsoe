@@ -116,11 +116,20 @@ body {
     color: var(--label-color);
     margin-top: 20px;
 }
+/* Fix Address alignment */
+.info table {
+    border-collapse: collapse;
+}
 
-/* 🌟 Fix Address Alignment */
-.address {
-    display: inline-block;
+.info td.label {
+    min-width: 120px; /* same as .label span */
     vertical-align: top;
-    max-width: calc(100% - 120px); /* keeps it aligned with label width */
+    color: var(--label-color);
+    font-weight: 600;
+}
+
+.info td {
+    text-align: left;
+    padding: 0; /* remove extra spacing */
 }
 
