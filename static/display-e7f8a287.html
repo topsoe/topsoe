@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanjeev Bansal - Business Card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="profile-icon">👤</div>
+        <div class="name">Sanjeev  Bansal</div>
+        
+        <div class='designation'>Principal Technical Service Engineer Technical Sales & Service</div>
+        
+        <div class='info'><span class='label'>Reception</span> + 91 924 0018000</div>
+        <div class='info'><span class='label'>Mobile</span> +919558804960</div>
+        
+        
+        <div class='info'><span class='label'>Email</span> <a href='mailto:snjv@topsoe.com'>snjv@topsoe.com</a></div>
+        
+        <div class='info'><table class='info'><tr><td class='label'><strong>Address</strong></td><td>Topsoe India Pvt. Ltd<br> DLF Tech Park 5th Floor<br> Plot no 1<br> Sector 143A<br> Noida<br> Uttar Pradesh - 201307<br> India</td></tr></table></div>
+
+
+        <div class='info'><span class='label'>Website</span> 
+<a href='https://Topsoe.com' target='_blank'>Topsoe.com</a></div>
+        
+        
+        <div class="footer">Powered by Ankul Reprographics And Prints</div>
+    </div>
+
+    <script>
+        function downloadVCard() {
+            const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Sanjeev Bansal
+ORG:
+TITLE:Principal Technical Service Engineer Technical Sales & Service
+TEL;TYPE=WORK:+ 91 924 0018000
+EMAIL:snjv@topsoe.com
+ADR:Topsoe India Pvt. Ltd, DLF Tech Park 5th Floor, Plot no 1, Sector 143A, Noida, Uttar Pradesh - 201307, India
+URL:Topsoe.com
+END:VCARD`;
+
+            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "contact.vcf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+
+    </body>
+    </html>
+    
